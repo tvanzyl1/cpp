@@ -5,6 +5,7 @@ import { pathToFileURL } from "node:url";
 export const SOURCE_URL = "https://www.cityofperthparking.com.au/json/cpp/map/carpark/alt/1";
 const CAR_PARK_ID = "40";
 const CAR_PARK_NAME = "Convention Centre";
+const MAX_FETCH_ATTEMPTS = 3;
 
 function parseBayCount(value) {
   const count = typeof value === "number" ? value : Number(value);
@@ -49,19 +50,31 @@ export function extractAvailability(records, fetchedAt = new Date().toISOString(
 }
 
 export async function writeAvailability(outputPath = "data.json") {
-  const response = await fetch(SOURCE_URL, {
-    headers: { accept: "application/json" },
-    signal: AbortSignal.timeout(15_000),
-  });
-  if (!response.ok) {
-    throw new Error(`Parking API request failed with HTTP ${response.status}.`);
+  let lastError;
+  for (let attempt = 1; attempt <= MAX_FETCH_ATTEMPTS; attempt += 1) {
+    try {
+      const response = await fetch(SOURCE_URL, {
+        headers: { accept: "application/json", "cache-control": "no-cache" },
+        signal: AbortSignal.timeout(15_000),
+      });
+      if (!response.ok) {
+        throw new Error(`Parking API request failed with HTTP ${response.status}.`);
+      }
+
+      const snapshot = extractAvailability(await response.json());
+      const destination = resolve(outputPath);
+      await mkdir(dirname(destination), { recursive: true });
+      await writeFile(destination, `${JSON.stringify(snapshot, null, 2)}\n`, "utf8");
+      return snapshot;
+    } catch (error) {
+      lastError = error;
+      if (attempt < MAX_FETCH_ATTEMPTS) {
+        await new Promise((resolveDelay) => setTimeout(resolveDelay, 1_000 * 2 ** (attempt - 1)));
+      }
+    }
   }
 
-  const snapshot = extractAvailability(await response.json());
-  const destination = resolve(outputPath);
-  await mkdir(dirname(destination), { recursive: true });
-  await writeFile(destination, `${JSON.stringify(snapshot, null, 2)}\n`, "utf8");
-  return snapshot;
+  throw new Error(`Parking API request failed after ${MAX_FETCH_ATTEMPTS} attempts: ${lastError.message}`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {
