@@ -1,0 +1,9 @@
+{
+  "carParkId": "40",
+  "name": "Convention Centre",
+  "address": "21 Mounts Bay Road",
+  "availableBays": 1060,
+  "isOpen": true,
+  "fetchedAt": "2026-11-08T12:34:56.673Z",
+  "sourceUrl": "https://www.cityofperthparking.com.au/convention-centre"
+}

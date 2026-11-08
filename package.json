@@ -1,0 +1,9 @@
+{
+  "name": "convention-centre-bay-count",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "refresh": "node scripts/refresh-data.mjs",
+    "test": "node --test"
+  }
+}

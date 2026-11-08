@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#090c1b" />
+    <meta
+      name="description"
+      content="A quick glance at Convention Centre car park availability in Perth."
+    />
+    <title>Convention Centre — Bay Count</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <main class="dashboard">
+      <header class="topbar">
+        <a class="wordmark" href="./" aria-label="Bay Count home">
+          <span class="wordmark-icon" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </span>
+          <span>PERTH<span class="wordmark-light"> / PARKING</span></span>
+        </a>
+        <span class="feed-pill" id="feed-status" data-state="loading">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span id="feed-label">Connecting</span>
+        </span>
+      </header>
+
+      <section class="bay-card" aria-labelledby="car-park-name">
+        <div class="card-orbit orbit-one" aria-hidden="true"></div>
+        <div class="card-orbit orbit-two" aria-hidden="true"></div>
+        <div class="card-topline">
+          <span class="eyebrow"><span class="eyebrow-mark">01</span> LIVE BAY COUNT</span>
+          <span class="location-tag">PERTH · WA</span>
+        </div>
+
+        <div class="count-wrap">
+          <p class="count-label" id="car-park-name">Convention Centre</p>
+          <p class="count-value" aria-live="polite" aria-atomic="true">
+            <span id="bay-count">—</span>
+          </p>
+          <p class="count-caption">BAYS AVAILABLE</p>
+        </div>
+
+        <div class="card-bottomline">
+          <span class="availability-state">
+            <span class="availability-bars" aria-hidden="true">
+              <i></i><i></i><i></i>
+            </span>
+            <span id="availability-label">Awaiting first reading</span>
+          </span>
+          <span class="capacity-note">21 Mounts Bay Road</span>
+        </div>
+      </section>
+
+      <section class="reading-row" aria-label="Data freshness">
+        <div class="reading-item">
+          <span class="reading-label">SNAPSHOT TIME</span>
+          <time id="updated-at">Waiting for data</time>
+        </div>
+        <div class="reading-divider" aria-hidden="true"></div>
+        <div class="reading-item reading-item-right">
+          <span class="reading-label">NEXT CHECK</span>
+          <span>30 seconds</span>
+        </div>
+      </section>
+
+      <p class="connection-message" id="connection-message" role="status" aria-live="polite">
+        Loading the latest parking snapshot…
+      </p>
+
+      <div class="actions">
+        <button class="refresh-button" id="refresh-button" type="button">
+          <svg aria-hidden="true" viewBox="0 0 20 20" fill="none">
+            <path
+              d="M16.2 7.5A6.5 6.5 0 0 0 4.7 5.2L3.5 6.5m0 0V3.7m0 2.8h2.8M3.8 12.5a6.5 6.5 0 0 0 11.5 2.3l1.2-1.3m0 0v2.8m0-2.8h-2.8"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          <span>Check again</span>
+        </button>
+        <a
+          class="source-link"
+          href="https://www.cityofperthparking.com.au/convention-centre"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Official car park page <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+
+      <aside class="driver-note">
+        <span class="driver-note-icon" aria-hidden="true">!</span>
+        <p><strong>Before you drive:</strong> set your route while parked. Don’t interact with this screen while driving.</p>
+      </aside>
+
+      <footer class="footer">
+        <span>DISPLAY CHECKS EVERY 30 SEC</span>
+        <span class="footer-separator" aria-hidden="true">/</span>
+        <span>FEED SNAPSHOT EVERY 5 MIN</span>
+      </footer>
+    </main>
+  </body>
+</html>
